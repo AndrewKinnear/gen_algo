@@ -134,7 +134,7 @@ def mutate(indv):
         possible_genes.append(chr(32+i))
 
     for i in range(len(indv.genes)):
-        if random.random() <= 0.07:
+        if random.random() <= 0.015:
             indv.genes[i] = possible_genes[random.randint(0, len(possible_genes)-1)]
 
 
@@ -142,7 +142,7 @@ def mutate(indv):
 def main():
     string = "Hello World! I am evolving into a new string"
 
-    population = create_population(100, string)
+    population = create_population(1000, string)
     set_fitness(string, population)
     generation = 0
     while get_fittest(population).fitness < len(string):
