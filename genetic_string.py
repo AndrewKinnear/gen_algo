@@ -1,7 +1,3 @@
-#Going to look in to some optimizations for gen algos. Including a different way for crossover and determening fitness
-
-
-
 import random
 
 # Class to hold list of individuals
@@ -141,7 +137,7 @@ def mutate(indv):
         if random.random() <= 0.015:
             indv.genes[i] = possible_genes[random.randint(0, len(possible_genes)-1)]
 
-
+#yesy
 # Main creates initial population, sets target and calls the genetic algo
 def main():
     string = "Hello World! I am evolving into a new string"
