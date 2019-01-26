@@ -141,7 +141,7 @@ def mutate(indv):
         if random.random() <= 0.015:
             indv.genes[i] = possible_genes[random.randint(0, len(possible_genes)-1)]
 
-
+#yesy
 # Main creates initial population, sets target and calls the genetic algo
 def main():
     string = "Hello World! I am evolving into a new string"
