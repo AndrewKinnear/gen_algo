@@ -56,29 +56,6 @@ def get_ham_fittest(population):
 
     return population.individual_list[fittest_index]
 
-
-
-# Returns the given amount of the fittest population
-def get_ham_fittest_el(population, amount):
-    j = 0
-    temp_list = []
-
-    while j < amount:
-        fittest = 9999999 #TODO Bring in length of string + 1
-        fittest_index = -1
-        i = 0
-        while i < len(population.individual_list):
-            temp_fitness = population.individual_list[i].fitness
-            if temp_fitness < fittest:
-                fittest = temp_fitness
-                fittest_index = i
-            i += 1
-        j += 1
-        population.individual_list.remove(population.individual_list[fittest_index])
-        temp_list.append(population.individual_list[fittest_index])
-    
-    return temp_list
-
 # Creates new population by target size, also sets indv fitness determined by the target
 def create_population(pop_size, target):
     my_list = []
@@ -111,16 +88,15 @@ def gen_algo(target, population):
     i = 1
     # Saves the fittest of the population for the new generation
     # fittest = get_fittest(population)
-    fittest_list = get_ham_fittest_el(population, len(population.individual_list)*.1)
-    new_indvs.extend(fittest_list)
+    fittest = get_ham_fittest(population)#len(population.individual_list)*.1
+    new_indvs.append(fittest)
 
     # Creates new indv by getting two fit indv from the tournament then crossing them over together.
     while i < len(population.individual_list):
         temp_indv_one = tournament(population)
         temp_indv_two = tournament(population)
-        new_indv = crossover(temp_indv_one, temp_indv_two)
-        # new_indv = crossover_slice(temp_indv_one, temp_indv_two)
-
+        # new_indv = crossover(temp_indv_one, temp_indv_two)
+        new_indv = crossover_slice(temp_indv_one, temp_indv_two)
         mutate(new_indv)
         new_indvs.append(new_indv)
         i += 1
@@ -159,7 +135,7 @@ def set_ham_fitness(target, population):
             if indv.genes[i] != target[i]:
                 indv.fitness += 1
 
-# Crosses over two indv to create one indv
+# Crosses over two indv to create one indv, every other gene
 def crossover(indv_one, indv_two):
     new_genes = []
 
@@ -171,15 +147,20 @@ def crossover(indv_one, indv_two):
     return Individual(new_genes, 0, 0)
 
 
-    # Crosses over two indv to create one indv
+# Crosses over two indv to create one indv, slices depending on ham fitness
 def crossover_slice(indv_one, indv_two):
     new_genes = []
     length = len(indv_one.genes)
-    rand = random.randint(0,length)
-    
-
-
+    rand = random.randint(0, length)
+    if rand%2 == 0:
+        new_genes.extend(indv_one.genes[rand:length])
+        new_genes.extend(indv_two.genes[0:rand])
+    else:
+        new_genes.extend(indv_one.genes[0:rand])       
+        new_genes.extend(indv_two.genes[rand:length])
     return Individual(new_genes, 0, 0)
+
+
 
 # Mutates the indv at a very low rate
 def mutate(indv):
@@ -189,14 +170,14 @@ def mutate(indv):
         possible_genes.append(chr(32+i))
 
     for i in range(len(indv.genes)):
-        if random.random() <= 0.025:
+        if random.random() <= 0.015:
             indv.genes[i] = possible_genes[random.randint(0, len(possible_genes)-1)]
 
 # Main creates initial population, sets target and calls the genetic algo
 def main():
-    string = "Charles Darwin was right!"
+    string = "Charles Darwin was right! What happens when I make it longer with this new slice style"
 
-    population = create_population(2000, string)
+    population = create_population(1000, string)
     # set_fitness(string, population)
     set_ham_fitness(string, population)
     generation = 0
