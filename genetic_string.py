@@ -1,3 +1,7 @@
+#Going to look in to some optimizations for gen algos. Including a different way for crossover and determening fitness
+
+
+
 import random
 
 # Class to hold list of individuals
